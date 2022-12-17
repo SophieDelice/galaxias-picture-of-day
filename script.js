@@ -1,23 +1,42 @@
 // alert ("are you connected");
 
-const pictureBox = document.getElementById("picture-box"); 
 
-$.ajax({
-    url: "https://api.nasa.gov/planetary/apod?api_key=EeuWnBDPnTaeGXEIn4Y2ABX84HoySZfEkKWecEOF" 
-}).then(
-    (data) => {
-        console.log(data)
-        apiExample.push(data)
+let pictureBox = document.getElementById("picture-box");
+//console.log(pictureBox)
 
-        for ( let i=0 ; i <= apiExample.length ; i++){ 
-            const pictureElement = document.createElement("img"); 
-        pictureElement.setAttribute("src" , apiExample[i].url); 
-        pictureBox.appendChild(pictureElement)
-        //console.log(pictureElement)
-       
-         }
-   }, 
-   (error) => {
-    console.log("bad request:", error); 
-   }
-);
+
+
+function dataFromUrl (evt) {
+    evt.target.style.display = "none";
+    $.ajax ({
+        url: "https://api.nasa.gov/planetary/apod?api_key=EeuWnBDPnTaeGXEIn4Y2ABX84HoySZfEkKWecEOF"
+    })
+    .then(
+        (data) =>{
+            //console.log(data)
+
+            let pictureElement = document.createElement ("img");
+            pictureElement.setAttribute("src" , data.url)  
+            //console.log(pictureElement)
+            pictureBox.appendChild(pictureElement)
+            
+            let nameImage = document.createElement("p");
+            nameImage.textContent = data.title;
+            pictureBox.appendChild(nameImage)
+
+            let imageExpl = document.createElement("p");
+            imageExpl.textContent = data.explanation;
+            pictureBox.appendChild(imageExpl)
+
+
+        },
+        (error) => {
+            console.log("bad request:" , error); 
+        }
+    )
+
+}
+
+let btnImg =document.getElementById("btnImg");
+
+btnImg.addEventListener("click" , dataFromUrl)
